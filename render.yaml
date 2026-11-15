@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: woxi-altcoin-demo-bot
+    runtime: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scanner.py
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: MPLBACKEND
+        value: Agg
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: BYBIT_DEMO_API_KEY
+        sync: false
+      - key: BYBIT_DEMO_API_SECRET
+        sync: false
+      - key: BYBIT_DEMO_BASE_URL
+        value: https://api-demo.bybit.com
+      - key: DEMO_AUTO_TRADE_ENABLED
+        value: "true"
+      - key: TOP_SYMBOLS_COUNT
+        value: "60"
+      - key: MIN_24H_TURNOVER_USD
+        value: "15000000"
+      - key: SCAN_INTERVAL_SECONDS
+        value: "30"
+      - key: FULL_SCAN_COOLDOWN_SECONDS
+        value: "180"
+      - key: DEFAULT_BANKROLL_USD
+        value: "100.0"
+      - key: MARGIN_PER_TRADE_PCT
+        value: "10.0"
+      - key: DEFAULT_LEVERAGE
+        value: "10"
