@@ -281,19 +281,19 @@ def start_health_http_server(
                         ensure_ascii=False,
                     ).encode("utf-8")
             else:
-                with scan_lock:
-                    body = json.dumps(
-                        {
-                            "ok": True,
-                            "service": "woxi-altcoin-demo-bot",
-                            "last_scan": sim.state.get("last_scan_time", ""),
-                            "open_trades": len(sim.active_trades),
-                            "bankroll_usd": sim.bankroll,
-                            "demo_configured": demo_trader.is_configured,
-                            "demo_auto_trade": demo_trader.enabled,
-                        },
-                        ensure_ascii=False,
-                    ).encode("utf-8")
+                st = dict(sim.state)
+                body = json.dumps(
+                    {
+                        "ok": True,
+                        "service": "woxi-altcoin-demo-bot",
+                        "last_scan": st.get("last_scan_time", ""),
+                        "open_trades": len(st.get("active_trades") or {}),
+                        "bankroll_usd": float(st.get("current_bankroll", sim.bankroll)),
+                        "demo_configured": demo_trader.is_configured,
+                        "demo_auto_trade": demo_trader.enabled,
+                    },
+                    ensure_ascii=False,
+                ).encode("utf-8")
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")

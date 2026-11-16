@@ -420,8 +420,10 @@ class BybitDemoTrader:
                 },
                 signed=True,
             )
-            if res.get("retCode") != 0:
-                note = f"Bakiye eşitleme uyarısı: {res.get('retMsg')}"
+            inner_res = res.get("result") or {}
+            if res.get("retCode") != 0 or inner_res.get("orderStatus") == "FAIL":
+                err_txt = inner_res.get("retMsg") or res.get("retMsg")
+                note = f"Bakiye eşitleme uyarısı: {err_txt}"
             elif abs(diff) > 100000:
                 note = "Tek seferde en fazla 100.000 USDT düzenlenebilir; gerekirse 1 dk sonra /kasa komutunu tekrarlayın."
             time.sleep(0.6)

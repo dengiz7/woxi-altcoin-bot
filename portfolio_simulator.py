@@ -83,9 +83,9 @@ class PortfolioSimulator:
         last_ts = int(self.state.get("seen_candle_signals", {}).get(key, 0))
         if last_ts >= setup.candle_timestamp:
             return True
-        # Aynı coinde aynı motordan halihazırda açık işlem varsa tekrar açma
+        # Aynı coinde aynı motordan veya bulut kurtarmasından (DEMO_RECOVERED) halihazırda açık işlem varsa tekrar açma
         for tr in self.active_trades.values():
-            if tr.get("symbol") == setup.symbol and tr.get("engine") == setup.engine:
+            if tr.get("symbol") == setup.symbol and tr.get("engine") in (setup.engine, "DEMO_RECOVERED"):
                 return True
         return False
 
